@@ -16,19 +16,21 @@ passport.use(new GoogleStrategy({
     clientSecret: keys.google.clientSecret
 }, (accessToken, refreshToken, profile, done) => {
     // passport callback function
-
     User.findOne({
         googleId: profile.id
     }).then(user => {
         if (user) {
-            console.log('user is' + user);
+            done(null, user)
         } else {
             new User({
                     username: profile.displayName,
-                    googleId: profile.id
+                    googleId: profile.id,
+                    thumbnail: profile.photos[0].value
                 }).save()
                 .then(newUser => {
-                    console.log('new user is created' + newUser);
+
+                    done(null, newUser)
+
                 })
                 .catch(err => {
                     console.log(err);

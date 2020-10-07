@@ -4,13 +4,16 @@ const router = express.Router();
 
 // auth login
 router.get('/login', (req, res) => {
-    res.render('login')
+    res.render('login', {
+        user: req.user
+    })
 })
 
 // auth logout
 router.get('/logout', (req, res) => {
     // handle with google
-    res.send('logout')
+    req.logOut();
+    res.redirect('/')
 
 })
 
@@ -22,7 +25,7 @@ router.get('/google', passport.authenticate('google', {
 
 // red
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.send('this URI reached')
+    res.redirect('/profile')
 })
 
 module.exports = router;
